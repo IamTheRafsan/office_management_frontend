@@ -1,7 +1,7 @@
 "use client";
+
 import { useState, FormEvent } from "react";
 import axios from "axios";
-import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 
 export default function SignIn() {
@@ -17,25 +17,15 @@ export default function SignIn() {
     setError("");
 
     try {
-      // 1. Call your login API endpoint
-      const response = await axios.post(
-        `http://localhost:3001/hr/login`, // Your login endpoint
-        { email, password }
+      await axios.post(
+        "http://localhost:3001/hr/login",
+        { email, password },
+        { withCredentials: true } // ✅ send HTTP-only cookie
       );
 
-      // 2. Check if response has token (adjust based on your API response structure)
-      if (response.data.token) {
-        Cookies.set("token", response.data.token, {
-          expires: 7,
-          sameSite: "strict",
-        });
-        console.log("Token saved:", response.data.token);
-        router.push("/dashboard");
-      } else {
-        console.error("No token received from server", response.data);
-      }
+      // Login successful
+      router.push("/dashboard");
     } catch (err: any) {
-      // 5. Handle errors
       setError(
         err.response?.data?.message || "Login failed. Please try again."
       );

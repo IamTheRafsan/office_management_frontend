@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Cookies from "js-cookie";
 
 type Employee = {
   id: number;
@@ -30,13 +29,8 @@ export default function EmployeesTable() {
       setError("");
 
       try {
-        const token = Cookies.get("token");
-        if (!token) throw new Error("No token found. Please login.");
-
-        const response = await axios.get(`http://localhost:3001/hr/employees`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+        const response = await axios.get("http://localhost:3001/hr/employees", {
+          withCredentials: true, // ✅ send HTTP-only cookie automatically
         });
 
         setEmployees(response.data);
@@ -61,8 +55,8 @@ export default function EmployeesTable() {
     return <p className="text-center mt-4">No employees found.</p>;
 
   return (
-    <div className="overflow-x-auto mt-6 ml-63 mr-5">
-      <table className="min-w-full bg-white border rounded-lg shadow-md">
+    <div className="mt-6 ml-63 mr-5 w-full overflow-hidden">
+      <table className="w-full table-auto border-collapse border border-gray-300 shadow-md">
         <thead className="bg-gray-200">
           <tr>
             <th className="py-2 px-4 border">ID</th>
@@ -80,16 +74,16 @@ export default function EmployeesTable() {
         <tbody>
           {employees.map((emp) => (
             <tr key={emp.id} className="text-center">
-              <td className="py-2 px-4 border">{emp.id}</td>
-              <td className="py-2 px-4 border">{emp.fullName}</td>
-              <td className="py-2 px-4 border">{emp.email}</td>
-              <td className="py-2 px-4 border">{emp.phoneNumber}</td>
-              <td className="py-2 px-4 border">{emp.age}</td>
-              <td className="py-2 px-4 border">{emp.gender}</td>
-              <td className="py-2 px-4 border">{emp.status}</td>
-              <td className="py-2 px-4 border">{emp.department}</td>
-              <td className="py-2 px-4 border">{emp.salary ?? "-"}</td>
-              <td className="py-2 px-4 border">
+              <td className="py-2 px-2 border">{emp.id}</td>
+              <td className="py-2 px-2 border">{emp.fullName}</td>
+              <td className="py-2 px-2 border">{emp.email}</td>
+              <td className="py-2 px-2 border">{emp.phoneNumber}</td>
+              <td className="py-2 px-2 border">{emp.age}</td>
+              <td className="py-2 px-2 border">{emp.gender}</td>
+              <td className="py-2 px-2 border">{emp.status}</td>
+              <td className="py-2 px-2 border">{emp.department}</td>
+              <td className="py-2 px-2 border">{emp.salary ?? "-"}</td>
+              <td className="py-2 px-2 border">
                 {new Date(emp.createdAt).toLocaleDateString()}
               </td>
             </tr>

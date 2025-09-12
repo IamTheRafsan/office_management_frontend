@@ -1,30 +1,32 @@
-"use client";
 import { useState, useEffect } from "react";
+import axios from "axios";
 
-export const useAuth = () => {
+export function useAuth() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    const checkAuth = () => {
-      const token = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("token="))
-        ?.split("=")[1];
-
-      setIsAuthenticated(!!token);
+    const checkAuth = async () => {
+      try {
+        await axios.get("http://localhost:3001/hr/me", {
+          withCredentials: true,
+        });
+        setIsAuthenticated(true);
+      } catch {
+        setIsAuthenticated(false);
+      }
     };
 
     checkAuth();
-
-    // Optional: Check auth status periodically or on storage events
-    const interval = setInterval(checkAuth, 1000); // Check every second
-    return () => clearInterval(interval);
   }, []);
 
-  const logout = () => {
-    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;";
+  const logout = async () => {
+    await axios.post(
+      "http://localhost:3001/hr/logout",
+      {},
+      { withCredentials: true }
+    );
     setIsAuthenticated(false);
   };
 
   return { isAuthenticated, logout };
-};
+}
