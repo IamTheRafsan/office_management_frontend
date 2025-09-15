@@ -10,9 +10,9 @@ export default function Navbar() {
   const router = useRouter();
   const { isAuthenticated, logout } = useAuth();
 
-  const handleLogout = () => {
-    logout();
-    router.push("/login");
+  const handleLogout = async () => {
+    await logout(); // clears cookie + updates state
+    router.push("/login"); // redirect to login
   };
 
   const navItems = [
@@ -20,14 +20,13 @@ export default function Navbar() {
     { label: "Employees", href: "/employees" },
     { label: "Tasks", href: "/tasks" },
     { label: "Attendance", href: "/attendance" },
-    { label: "Payroll", href: "/payroll" },
     { label: "Registration", href: "/registration" },
     { label: "Login", href: "/login" },
   ];
 
   return (
     <aside className="fixed top-0 left-0 h-full w-60 bg-white shadow-md border-r border-gray-200 p-6">
-      <h1 className="text-xl font-bold mb-6">HR Dashboard</h1>
+      <h1 className="text-xl font-bold mb-6">Office Management</h1>
 
       <nav className="flex flex-col space-y-3">
         {navItems.map((item) => (

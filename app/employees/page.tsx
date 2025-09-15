@@ -73,7 +73,13 @@ export default function EmployeesTable() {
         </thead>
         <tbody>
           {employees.map((emp) => (
-            <tr key={emp.id} className="text-center">
+            <tr
+              key={emp.id}
+              className="text-center hover:bg-gray-100 cursor-pointer hover:text-indigo-600 transition-colors duration-200"
+              onClick={() => {
+                window.location.href = `/employees/${emp.id}`;
+              }}
+            >
               <td className="py-2 px-2 border">{emp.id}</td>
               <td className="py-2 px-2 border">{emp.fullName}</td>
               <td className="py-2 px-2 border">{emp.email}</td>
